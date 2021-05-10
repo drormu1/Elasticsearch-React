@@ -1,0 +1,50 @@
+get _aliases?pretty=true
+
+get _cat/indices/?v
+
+GET /clients/_search
+{
+  "query": {
+    "match_all": { }
+  }
+}
+POST /clients/_search
+select * from clietns
+
+get /clients/_search?pretty=true
+
+
+#delete  /clients
+
+get /clients/_mappings
+
+POST /products/_search
+{"size":10,"from":0,
+"query": {
+    "multi_match": {
+      "fields":  [ "tags", "description"  ,"name^5"],
+      "query":     "Kiwi",
+      "fuzziness": "AUTO",
+      "operator":   "or"
+    }},
+   "highlight" : {
+    "pre_tags" : ["<span class='highlighter'>"],
+    "post_tags" : ["</span>"],
+    "fields" : {
+      "*" : {}
+    }
+}
+}
+
+
+
+GET products/_search
+{
+  "query": {
+    "match_all": { }
+  }
+}
+
+
+
+

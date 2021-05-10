@@ -1,0 +1,37 @@
+HOW TO USE
+
+-----------------
+
+
+Client angular
+=========
+go to 
+..client\angular\NG - local api  
+or 
+
+
+..client\angular\NG - node api  
+
+run "npm install" in your terminal to install all dependencies from npm. 
+This will create the node_modules folder.
+
+
+Once you did that, simply run "ng serve", this open the chrome on:
+http://localhost:4200
+ 
+
+server:
+====
+if you want to see also the node+mongo version then:
+
+in this cloud of mongo you can finf db:
+
+https://cloud.mongodb.com/v2/6056da8425cbce14dfca3746#metrics/replicaSet/606e9e589fb54051bc237ca8/explorer/shop/products/find
+mongo login via  google  : drormu2@gmail.com  + sararoni2
+
+just cd it the server folder:
+run the command "nodemon app.js" - in vscode, from server dir
+
+you can test the node+express:  run the browser,  http://localhost:3000/categories
+
+
