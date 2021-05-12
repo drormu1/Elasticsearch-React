@@ -23,7 +23,7 @@ POST /products/_search
 "query": {
     "multi_match": {
       "fields":  [ "tags", "description"  ,"name^5"],
-      "query":     "Kiwi",
+      "query":     "Nullam",
       "fuzziness": "AUTO",
       "operator":   "or"
     }},
@@ -31,9 +31,15 @@ POST /products/_search
     "pre_tags" : ["<span class='highlighter'>"],
     "post_tags" : ["</span>"],
     "fields" : {
-      "*" : {}
+      "*" :  {"fragment_size" : 150, "number_of_fragments" : 3}
     }
-}
+   }
+,
+"sort": [
+        { "price": { "order": "desc" }},
+        { "_id": { "order": "desc" }}
+    ]
+    
 }
 
 
@@ -47,4 +53,89 @@ GET products/_search
 
 
 
+
+POST /products/_search
+{"size":10,"from":0,
+
+
+"query": {
+    "multi_match": {
+      "fields":  [ "tags", "description"  ,"name^5"],
+      "query":     "Nullam",
+      "fuzziness": "AUTO",
+      "operator":   "or"
+    }},
+
+
+"highlight" : {
+    "pre_tags" : ["<span class='highlighter'>"],
+    "post_tags" : ["</span>"],
+    "fields" : {
+      "*" :  {"fragment_size" : 150, "number_of_fragments" : 3}
+    }
+   }
+,
+"sort": [
+        { "price": { "order": "desc" }},
+        { "_id": { "order": "desc" }}
+    ]
+    
+}
+
+
+
+GET orders/_search
+{
+  "query": {
+    "match_all": { }
+  }
+}
+
+get /orders/_mapping
+
+
+POST /orders/_search
+{"size":10,"from":0,
+
+
+"query": {
+    "multi_match": {
+      "fields":  [ "sales_channel", "salesman.name"  ,"status^5"],
+      "query":     "Thea Chidgey",
+      "fuzziness": "AUTO",
+      "operator":   "or"
+    }},
+
+ "aggs": {
+    "sales_channel": {
+      "terms": {
+        "field": "sales_channel.keyword"
+      }
+    },
+     "product_id": {
+      "terms": {
+        "field": "lines.product_id"
+      }
+    },
+     "salesman.name": {
+      "terms": {
+        "field": "salesman.name.keyword"
+      }
+    }
+  },
+  
+"highlight" : {
+    "pre_tags" : ["<span class='highlighter'>"],
+    "post_tags" : ["</span>"],
+    "fields" : {
+      "*" :  {"fragment_size" : 150, "number_of_fragments" : 3}
+    }
+   }
+,
+"sort": [
+       
+        { "_id": { "order": "desc" }}
+    ]
+    
+}
 

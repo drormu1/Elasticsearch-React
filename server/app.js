@@ -31,22 +31,38 @@ app.get("/searchold",function(req,res){
    
 });  
 
-app.get("/search",function(req,res){ 
+app.get('/search', (req, res, next) => {  
+
+    res.header('Content-Type', 'application/json');
+    elsHelper.searchAsync(req)
+      .then((r)=>{
+       // console.log(r);
+        res.status(200).send(r);        
+      })
+      .catch((e)=>{ 
+        console.log(e); 
+       // console.error('search: ', e)
+        res.status(500).send(e.body)
+      })
+  });
+ 
+
+  app.get('/indices', (req, res, next) => {  
+
+    res.header('Content-Type', 'application/json');
+    elsHelper.indices()
+      .then((r)=>{
+       // console.log(r);
+        res.status(200).send(r);        
+      })
+      .catch((e)=>{ 
+        console.log(e); 
+       // console.error('search: ', e)
+        res.status(500).send(e.body)
+      })
+  });
+ 
   
-  // console.log('get search')      ;  
-  // let results = elsHelper.search().then(function(res1){console.log(res1.length);return res1;});
-  // console.log(results);
-   res.header('Content-Type', 'application/json');
-   elsHelper.searchAsync().then((r)=>{res.status(200).send(r); });
-   
-   
- 
- 
-});  
- 
-
-
-
 
 //add new product
 app.post("/product",function(request,response){    
