@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { Client } = require('@elastic/elasticsearch');
 const logger = require('../Helpers/logger');
 const SearchRequest = require('../Models/searchRequest');
-
+const Settings = require("../Config/settings");
 class ElasticHelper {
      dror = "dror mushay" ;
      uri =   "http://localhost:9200";
@@ -26,40 +26,36 @@ class ElasticHelper {
 
     async searchAsync(req) {
       try {  
-
-      const indexAggregations = ["sales_channel", "salesman.name"  ,"status","_id","amount"];
-      const indexFields = ["sales_channel^5", "salesman.name"  ,"status","_id","amount"];
       
+      const activeIndex = req.body.activeIndex || 'orders';
+      const indexSettings =  Settings.general.find(x => x.name === 'orders');
+      debugger;
       const  searchRequest  = new SearchRequest();
-      searchRequest.indices=['orders','products'];
-      searchRequest.activeIndex= 0; 
+      searchRequest.activeIndex= activeIndex;       
       searchRequest.term="gert Cla Gra ";
       searchRequest.page=0;
       searchRequest.size=500;
       searchRequest.andCondition = 'or';
       searchRequest.sortDirection='desc';
       searchRequest.sort='_id';
+
       searchRequest.filters=[{"key":"status","values":["processed","completed","cancelled"]},
-                             {"key":"sales_channel","values":["store","web","phone"]}
-
-    ];
+                             {"key":"sales_channel","values":["store","web","phone"]}];
 
      
-      
-     
-      
-      
-      
       const doc = await this.client.search({
-        index:'orders',
+        index:activeIndex,
+        _source: false,
+       
         sort: [searchRequest.sort + ':' +searchRequest.sortDirection],
-         body: {        
+         body: {      
+          fields: indexSettings.returnFields, //return fields  
           size: searchRequest.size,
           from: searchRequest.from, 
-          aggs: this.getAggsStr(indexAggregations),
+          aggs: this.getAggsStr(indexSettings.aggregation),
           query : {
             bool:{
-              must:this.getQuery(searchRequest,indexFields)}}
+              must:this.getQuery(searchRequest,indexSettings.searchFields)}}
          
        }});
 
@@ -73,19 +69,58 @@ class ElasticHelper {
         return err;
       }
      };  
+    
+
+
+     async autocompleteAsync(req) {
+      try {  
+         
+      const activeIndex = req.body.activeIndex || 'orders';
+      const indexSettings =  Settings.general.find(x => x.name === 'orders');
+      const term = req.body.term || 'store';
+
+      const doc = await this.client.search({
+        index:activeIndex,
+        _source: false,       
+        size: 10,
+        body: {   
+        fields: ["autocomplete"],
+        
+        query : {
+            multi_match: {         
+              query: term,                      
+              type: "bool_prefix",
+              fields: [
+                "autocomplete",
+                "autocomplete._2gram",
+                "autocomplete._3gram"
+              ]
+         }}      
+       }});
+       
+       this.logging(doc);             
+       return  doc.body.hits.hits.map(h=>h).map(m=>m.fields).map(a=>a.autocomplete).sort();         
+      } 
+      catch(err) {        
+       logger.error(err.message);
+      //console.log(err);
+        return err;
+      }
+     }; 
   
+     ///////// Private Search functions   ///////////////////////
      getQuery(searchRequest,indexFields)
     {
       let arr = [];
        arr.push({
         multi_match:{
-          fields: indexFields ,
+          fields: indexFields,//search fields 
           query:     searchRequest.term,
           lenient: true,
           fuzziness: "AUTO",
           operator:   searchRequest.andCondition
         }});
-     
+      //ad aggregations as filters
         searchRequest.filters.forEach(f => {        
          arr.push(JSON.parse(`{"terms":{"${f.key}${this.getAggType(f)}":${JSON.stringify(f.values)}}}`));
        })
@@ -126,9 +161,7 @@ class ElasticHelper {
        //let str =  filters.map(f=>`"by_${f}":{"terms":{"field":"${f}.keyword","size":20}}`);    
       
     }
-  
-   
-
+     
   logging(doc)  
   {
      

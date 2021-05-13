@@ -45,7 +45,20 @@ app.get('/search', (req, res, next) => {
         res.status(500).send(e.body)
       })
   });
- 
+  app.get('/autocomplete', (req, res, next) => {  
+
+    res.header('Content-Type', 'application/json');
+    elsHelper.autocompleteAsync(req)
+      .then((r)=>{
+       // console.log(r);
+        res.status(200).send(r);        
+      })
+      .catch((e)=>{ 
+        console.log(e); 
+       // console.error('search: ', e)
+        res.status(500).send(e.body)
+      })
+  });
 
   app.get('/indices', (req, res, next) => {  
 
