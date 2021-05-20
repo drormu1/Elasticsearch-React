@@ -9,6 +9,7 @@ module.exports = class SearchRequest {
     static page = 0;
     static pageSize=100;
     static filters= [];
+    static filterSpecialAsStr='';
     static andCondition='or';
     static sort='';
     static sortDirection='desc';

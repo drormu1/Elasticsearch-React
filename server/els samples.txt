@@ -1,0 +1,153 @@
+POST /orders/_search
+{"fields":["sales_channel","salesman.name","status","_id","amount","purchased_at"],
+"size":500,
+"sort":[{"_id":{"order":"desc"}}],
+"highlight":{"pre_tags":["<span class='highlighter'>"],"post_tags":["</span>"],"fields":{"*":{"fragment_size":150,"number_of_fragments":3}}},
+
+"aggs":
+{
+"by_sales_channel":{"terms":{"field":"sales_channel.keyword","size":20}},
+"by_salesman.name":{"terms":{"field":"salesman.name.keyword","size":20}},
+"by_status":{"terms":{"field":"status.keyword","size":20}},
+"by__id":{"terms":{"field":"_id.keyword","size":20}},
+"by_total_amount":{"range":{"field":"total_amount","ranges":[{"to":100},{"from":100,"to":200},{"from":200}]}},
+"by_purchased_at":{"range":{"field":"purchased_at","format":"MM-yyy","ranges":[{"to":"now-10M/M"},{"from":"now-10M/M"}]}}},
+
+
+"query":{"bool":{"must":[{"multi_match":{"fields":["sales_channel^5","salesman.name","status","_id"],
+"query":"gert Cla Gra ","lenient":true,"fuzziness":"AUTO","operator":"or"}},
+{"terms":{"status.keyword":["processed","completed","cancelled"]}},
+{"terms":{"sales_channel.keyword":["store","web","phone"]}},
+{"range":{"purchased_at":{"gte":"2015-10-13T00:00:00","lt":"now"}}}]}}
+
+
+
+*******************************************************
+
+PUT orders/_mapping
+{
+  
+    "properties": {
+      "autocomplete": {
+              "type": "search_as_you_type"
+       
+      }
+    }
+  }
+
+get /orders/_mappings
+
+
+POST orders/_update_by_query
+{
+   "script" : "ctx._source.remove('autocomplete')" 
+}
+POST orders/_update_by_query
+{
+  "script" : "ctx._source.autocomplete = ctx._source.salesman.name + ' ' + ctx._source.sales_channel + ' ' +ctx._source.status "
+}
+
+
+
+GET /orders/_doc/1
+
+GET /orders/_search
+{
+  "query": {
+    "match_all": { }
+  }
+}
+
+GET orders/_search
+{
+  "_source": false,
+ "fields": ["autocomplete"],
+  "query": {
+    "multi_match": {
+    
+      "query": "store",
+      
+      
+      "type": "bool_prefix",
+      "fields": [
+        "autocomplete",
+        "autocomplete._2gram",
+        "autocomplete._3gram"
+      ]
+    }
+  }
+}
+
+
+
+########################   PRODUCTS    ############################################################################
+
+delete /my-index
+
+POST /_reindex
+{
+  "source": {
+    "index": "orders"
+  },
+  "dest": {
+    "index": "my-index"
+  }
+}
+POST /_refresh
+
+
+
+PUT products/_mapping
+{
+  
+    "properties": {
+      "autocomplete": {
+              "type": "search_as_you_type"
+       
+      }
+    }
+  }
+
+get products/_mappings
+
+
+
+POST products/_update_by_query
+{
+   "script" : "ctx._source.remove('autocomplete')" 
+}
+POST products/_update_by_query
+{
+  "script" : "ctx._source.autocomplete = ctx._source.name + ' ' + ctx._source.tags  "
+}
+
+
+
+GET /products/_doc/1
+
+GET /products/_search
+{
+  "query": {
+    "match_all": { }
+  }
+}
+
+GET products/_search
+{
+  "_source": false,
+ "fields": ["autocomplete"],
+  "query": {
+    "multi_match": {
+    
+      "query": "Wine",
+      
+      
+      "type": "bool_prefix",
+      "fields": [
+        "autocomplete",
+        "autocomplete._2gram",
+        "autocomplete._3gram"
+      ]
+    }
+  }
+}
