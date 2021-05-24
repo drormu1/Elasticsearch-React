@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-
+const os = require('os');
 const bodyParser = require("body-parser");
 const assert = require('assert');
 const cors = require('cors');
@@ -46,8 +46,17 @@ app.get('/search', (req, res, next) => {
       })
   });
 
-  app.get('/init', (req, res, next) => {  
-      res.status(200).send( Settings.general);
+  app.get('/init', (req, res, next) => {
+      
+      var user = os.userInfo().username ;
+      console.log(user);
+      var path = require('path');
+      var userName = process.env['USERPROFILE'].split(path.sep)[2];
+      var loginId = path.join("domainName",userName);
+      
+      console.log(loginId);
+
+      res.status(200).send({userName,settings:Settings.general});
   });
  
   app.get('/searchNonActives', (req, res, next) => {  
