@@ -1,4 +1,4 @@
-import React, {useContext, useReducer} from 'react';
+import React, {useContext, useReducer,useEffect} from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,7 +9,79 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchContext from '../../state/context';
+import {initCall} from '../../api/searchApi';
 
+
+export default function Header() {
+
+  const classes = useStyles();
+  const {state, dispatch} = useContext(SearchContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log('in header is header useEffect '+state.configuration)   ;
+      if(state.configuration == null)
+      {              
+          return initCall().then(res => {
+            dispatch({type:'SET_INIT_CONFIGURATION', payload:res});    
+            console.log('in header '+state.configuration)   ;
+          }); 
+         
+      }
+    };
+ 
+    fetchData();
+  }, []);
+ 
+
+  
+
+  return (
+    <div className={classes.grow}>
+      <AppBar position="fixed">
+        <Toolbar>
+          
+          <Typography className={classes.title} variant="h6" noWrap>          
+             {state.appTitle}
+           </Typography>
+          
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder=""
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </div>
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>           
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+             
+              aria-haspopup="true"             
+              color="inherit"
+            >
+              <AccountCircle />
+              <Typography variant="subtitle1" noWrap>          
+            {state.configuration ? state.configuration.user.displayName : null}
+           </Typography>
+                
+              </IconButton>
+          </div>
+          
+        </Toolbar>
+      </AppBar>  
+      <div className={classes.toolbar}></div>
+    </div>
+    
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -68,56 +140,4 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
     },
   }
-}));
-
-export default function Header() {
-  const classes = useStyles();
-  const {state, dispatch} = useContext(SearchContext);
-
-
-  return (
-    <div className={classes.grow}>
-      <AppBar position="fixed">
-        <Toolbar>
-          
-          <Typography className={classes.title} variant="h6" noWrap>          
-             {state.appTitle}
-           </Typography>
-          
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>           
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-             
-              aria-haspopup="true"             
-              color="inherit"
-            >
-              <AccountCircle />
-              <Typography variant="subtitle1" noWrap>          
-              {state.user.displayname}
-           </Typography>
-                
-              </IconButton>
-          </div>
-          
-        </Toolbar>
-      </AppBar>  
-      <div className={classes.toolbar}></div>
-    </div>
-    
-  );
-}
+})); 

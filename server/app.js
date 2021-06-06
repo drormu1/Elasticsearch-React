@@ -10,7 +10,7 @@ const Load = require("./Loaders/load");
 
 const controller = new Controller()
 
-app.use(cors({origin: 'http://localhost:4200'}));
+app.use(cors({origin: 'http://localhost:3000'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json()); 
@@ -51,12 +51,16 @@ app.get('/search', (req, res, next) => {
       var user = os.userInfo().username ;
       console.log(user);
       var path = require('path');
-      var userName = process.env['USERPROFILE'].split(path.sep)[2];
-      var loginId = path.join("domainName",userName);
+      var user = {loginName:process.env['USERPROFILE'].split(path.sep)[2] , displayName:"דרור מוסאי"};
+     
+      var loginId = path.join("domainName",user.loginName);
       
       console.log(loginId);
-
-      res.status(200).send({userName,settings:Settings.general});
+      controller.getAllAggregations()
+      .then(data=> {       
+        res.status(200).send({user,allAggregations:data,settings:Settings.general});
+      });
+      
   });
  
   app.get('/searchNonActives', (req, res, next) => {  
@@ -104,7 +108,7 @@ app.get('/search', (req, res, next) => {
       })
   });
  
-app.listen(3000, () => {
-    console.log(`Example app listening at http://localhost:${3000}`);
+app.listen(3001, () => {
+    console.log(`Example app listening at http://localhost:${3001}`);
   });
  

@@ -115,8 +115,35 @@ class Helper {
       }
     },`;
    }
-
+   getAllAggregations(indicesWithAggregations)
+   {
+    
+      let arr=[];    
+      let str='';
   
+      for(let i=0; i < indicesWithAggregations.length ; i++)
+      {
+        for(let a=0; a < indicesWithAggregations[i].aggregation.length ; a++)
+       {
+         console.log(indicesWithAggregations[i].name + " , " + indicesWithAggregations[i].aggregation[a]);
+          str +=  `
+              "${indicesWithAggregations[i].name}____${indicesWithAggregations[i].aggregation[a]}" : {
+                "terms": { 
+                  "field": "${indicesWithAggregations[i].aggregation[a]}.keyword"          
+                }
+                },`
+      }
+        
+      }
+      
+      str = str.slice(0,-1);
+      str= `{ ${str} }`;
+     // console.log(chalk.white.bgRed.bold(str));
+      return str;
+   }
+  
+
+   
 getMultiSearchQuery(nonActicesIndices,term)
 {
   let arr=[];
