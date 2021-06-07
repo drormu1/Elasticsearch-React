@@ -6,13 +6,12 @@ export default function reducer(state, action){
 
     switch(action.type){
         case 'SET_INIT_CONFIGURATION':
-                        
-                return {
-                    ...state,
-                    configuration: action.payload
-                }
+            return {
+                ...state,
+                configuration: action.payload,
+                activeTab: (state.activeTab == null) ? action.payload.indices[0] : state.activeTab
+            }
                       
-        
         default:
             return state;
     }

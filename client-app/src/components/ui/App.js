@@ -1,6 +1,7 @@
 import React, {useContext, useReducer} from 'react';
 import Layout from './Layout';
 import {Helmet} from "react-helmet";
+import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchReducer from '../../state/reducer';
 import SearchContext from '../../state/context';
 
@@ -25,3 +26,11 @@ function App() {
 }
 
 export default App;
+
+
+const useStyles = makeStyles((theme) => ({
+  grow: {
+    flexGrow: 1,
+  }
+})); 
+

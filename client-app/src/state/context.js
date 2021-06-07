@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 
 var initialState = {   
     configuration:null,
+    activeTab: null,
     appTitle: process.env.REACT_APP_CLIENT_NAME + ' - ' + process.env.REACT_APP_DEPLOYMENT_NAME,
     loading:false,   
     darkMode: localStorage.getItem('darkMode') && localStorage.getItem('darkMode') === 'true' ? true : false,
