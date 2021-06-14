@@ -8,7 +8,7 @@ const Settings = require("../Config/settings");
 const InternalSettings = require("../Config/internalSettings");
 const Helper = require("./helper");
 const { json } = require("express");
-
+const querystring = require('querystring');
 
 class Controller {
 
@@ -42,7 +42,7 @@ class Controller {
             "aggs": JSON.parse(this.helper.getAllAggregations(indicesWithAggregations))
           }
         });
-
+         
          console.log(JSON.stringify(data, null, 4));
           // var aggregations = Settings.general.filter(x => x.name == index)[0].aggregation;
           let indexAggs = [];
@@ -70,7 +70,7 @@ class Controller {
                   indexAggs[indexAggs.findIndex(i=>i.index ===  ri)].aggs.push(aggsOfField);
                 }
                 else
-                {
+                {                 
                   indexAggs.push({index:ri,aggs:aggsOfField});
                 }
                 aggsOfField=[];
@@ -163,12 +163,12 @@ class Controller {
 
         }
       });
-
+debugger;
       this.helper.logging(doc);
       return doc.body.hits.hits;
     }
     catch (err) {
-
+      debugger;
       logger.error(err.message);
       //console.log(err);
       return err;
@@ -177,8 +177,11 @@ class Controller {
 
   async autocompleteAsync(req) {
     try {
-      const indexSettings = Settings.general.find(x => x.name === 'orders');
-      const term = req.body.term || 'GAR';
+      let activeIndex = req.query.activeIndex;
+      let term = req.query.term;     
+
+      const indexSettings = Settings.general.find(x => x.name === activeIndex);//req.body.activeIndex
+     
 
       const doc = await this.client.search({
         index: Settings.general.map(a => a.name).join(','),
@@ -202,7 +205,8 @@ class Controller {
       });
 
       this.helper.logging(doc);
-      return doc.body.hits.hits.map(h => h).map(m => m.fields).map(a => a.autocomplete).sort();
+      debugger;
+      return doc.body.hits.hits.map(h => h).map(m => m.fields).map(a => a.autocomplete[0].replace(/\[/g, '').replace(/\]/g, '')).sort();
     }
     catch (err) {
       logger.error(err.message);
@@ -238,9 +242,11 @@ class Controller {
         index: index,
         body: r
       })
-        .then(data => { console.log(count++); });
+        .then(data => { console.log(count++); })
+        .catch(err => 
+          console.log(err));
     });
-
+ 
     return rows.length + ' inserted - ok';
   }
 

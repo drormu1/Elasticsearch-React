@@ -1,16 +1,20 @@
 import React, {useContext, useReducer} from 'react';
 import Layout from './Layout';
-import {Helmet} from "react-helmet";
+import {Helmet,HelmetProvider } from "react-helmet-async";
 import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchReducer from '../../state/reducer';
 import SearchContext from '../../state/context';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 function App() {
   const initialState = useContext(SearchContext);
   const [state, dispatch] = useReducer(SearchReducer, initialState);
-  
+  const theme = createMuiTheme({
+    direction: 'rtl',
+  });
 
   return (
+    <HelmetProvider>
     <SearchContext.Provider value={{state, dispatch}}>
    
       <Helmet>
@@ -22,6 +26,7 @@ function App() {
     </div>
    
     </SearchContext.Provider>
+    </HelmetProvider>
   );
 }
 

@@ -24,6 +24,14 @@ app.get('/', (req, res) => {
  //http://localhost:3000/load?file=youtubes
  //http://localhost:3000/load?file=employees
  //http://localhost:3000/load?file=comments
+ //companies
+
+ 
+ //city_inspections
+ //books
+ 
+//restaurant
+
 
 app.get("/load",function(req,res){ 
   load = new Load();
@@ -57,8 +65,10 @@ app.get('/search', (req, res, next) => {
       
       console.log(loginId);
       controller.getAllAggregations()
-      .then(data=> {       
-        res.status(200).send({user,allAggregations:data,settings:Settings.general});
+      .then(data=> {   
+       
+        indices = data.map(a=>a.index);
+        res.status(200).send({user,indices,indicesInfo:Settings.general, allAggregations:data});
       });
       
   });
@@ -79,7 +89,7 @@ app.get('/search', (req, res, next) => {
   });
 
   app.get('/autocomplete', (req, res, next) => {  
-
+    debugger;
     res.header('Content-Type', 'application/json');
     controller.autocompleteAsync(req)
       .then((r)=>{
@@ -89,6 +99,7 @@ app.get('/search', (req, res, next) => {
       .catch((e)=>{ 
         console.log(e); 
        // console.error('search: ', e)
+       debugger;
         res.status(500).send(e.body)
       })
   });

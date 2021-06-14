@@ -129,7 +129,8 @@ class Helper {
           str +=  `
               "${indicesWithAggregations[i].name}____${indicesWithAggregations[i].aggregation[a]}" : {
                 "terms": { 
-                  "field": "${indicesWithAggregations[i].aggregation[a]}.keyword"          
+                  "field": "${indicesWithAggregations[i].aggregation[a]}.keyword" ,
+                  "size": 33         
                 }
                 },`
       }

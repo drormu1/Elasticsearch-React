@@ -15,42 +15,65 @@ export default function SideMenu() {
     const classes = useStyles();
     const {state, dispatch} = useContext(SearchContext);
 
-    const currentIndexAggregations = state.configuration ?  state.configuration.allAggregations.filter(a=>state.activeTab === a.index)[0] : null;
+    const currentIndexAggregations = state.configuration ?  state.configuration.allAggregations.find(a=>state.activeIndex === a.index) : null;    
+    const ui = state.configuration ?  state.configuration.indicesInfo.filter(i=>i.name === state.activeIndex)[0].ui : null;
+
+    function translateField(field)
+    {
+        if(ui)
+        {
+           
+            return ui.some(f=>f.key === field) ?  ui.find(f=>f.key === field).title : field;
+        }
+    }
 
     return (
         <div className={classes.aggsGroupRoot}>
             {currentIndexAggregations != null ?                                
              currentIndexAggregations.aggs.map ( agg => ( 
-                       
-                        <div className={classes.aggsGroupBox}>
+                
+                        <div className={classes.aggsGroupBox}     key={agg.field}>
                         <FormControl component="fieldset" className={classes.aggsGroup}>
-                            <FormLabel component="legend"  className={classes.legend}>{agg.field}</FormLabel>
+                            <FormLabel component="legend"
+                             
+                              className={classes.legend}>{translateField(agg.field)}</FormLabel>
                             <Divider/>
                             <FormGroup className={classes.aggsGroupChild}>
-                                {agg.list.map(a => (
+                                {agg.list.sort().map(a => (
                                       <FormControlLabel className={classes.aggField}
+                                      key={agg + "_"+ a}
                                       classes={{
                                         label: classes.label, // Pass your override css here
+                                    }}
+                                    style={{
+                                        fontSize:'0.9em',
+                                        height:'1.1em',
+                                        marginRight:0,
+                                       
                                     }}
                                       control={
                                         <Checkbox className={classes.aggCheck}
                                         //   checked={state.checkedB}
                                         //   onChange={handleChange}
+                                        style={{
+                                            fontSize:'0.75em',
+                                            
+                                        }}
                                           name={a}
                                           color="primary"
                                         />
                                       } 
                                       label={a}
                                     />         
-                                ))}
-                                        </FormGroup>
+                                )).sort()}
+                            </FormGroup>
                             {/* <FormHelperText>You can display an error</FormHelperText> */}
                             
                         </FormControl>
                         </div>
                   ))
                
-             : <p> SideMenu</p>
+             : <p></p>
             }
            
         </div>
@@ -62,40 +85,53 @@ const useStyles = makeStyles((theme) => ({
     aggsGroupBox: {
       display: 'flex',      
       color:'rgba(0, 0, 0, 0.54)',
-      'margin-bottom' :'15px',
-      'overflow-x': 'hidden',
-        'max-height': '200px',
-        'overflow-y': 'scroll',
-        'border-radius': '5px',
-        border : '1px solid rgba(0, 0, 0, 0.14)' ,
-    
+      marginBottom :'15px',
+      overflowX: 'hidden',
+      // 'max-height': '150px',
+      overflowY: 'auto',
+      borderRadius: '5px',
+      textAlign: 'center',
+      border : '1px solid rgba(0, 0, 0, 0.14)' ,
+      maxHeight: '200px',    
     },
+
     aggsGroupRoot:
     {        
         padding:theme.spacing(0),
-        'margin-top': '-40px',                
+        marginTop: '-20px', 
     },
-    aggsGroup: {
-       
-        width: '260px',      
+  
+    aggsGroup: {                  
         margin: theme.spacing(0),
         padding: theme.spacing(0),
-        'max-height': '200px',
+        maxHeight: '200px',
+        
+
     },
     legend: {     
         color:'rgba(256, 256, 256)', 
         width: '100%',        
-        'background-color':'rgba(0, 0, 0, 0.54)',
-        padding: '2px',        
-        'font-weight':'bold',
-        'font-size':'0.85em',
+        backgroundColor:'rgba(0, 0, 0, 0.54)',
+        padding: '2px',               
+        fontsize:'0.9em',
+        '&:focused': {
+            background: "#efefef"
+          },
     },
     label:
     {   
-        'font-size':'0.85em',
+        fontSize:'0.9em',        
+        height:'1em',
+        width : '300px',
+        overflowX:'clip',
+        textAlign:'right',
+        '&:focused': {
+            background: "#efefef"
+          },
     },
     aggCheck:
-    {     
+    {
+        transform: "scale(0.75)",
         padding:'0px',
     }
   }));

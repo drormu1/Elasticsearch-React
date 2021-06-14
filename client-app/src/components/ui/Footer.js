@@ -1,29 +1,27 @@
-import React from 'react'
+import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-    text: {
-      padding: theme.spacing(2, 2, 0),
+    text: {      
+      backgroundColor:'rgba(0, 0, 0, 0.1)',
+      padding:3,
+      color: 'rgba(0, 0, 0, 0.35)'
     },
-    appBar: {
-      top: 'auto',
-      bottom: 0,
-    }
+   
   }));
 
 export default function Footer(){
     const classes = useStyles();
     const tag = `מערכת ${process.env.REACT_APP_CLIENT_NAME} גרסה ${process.env.REACT_APP_VERSION} פותחה ע"י אגף מל"ן - משהב"ט 2021`;
     return (
-      <>
-       
-        <AppBar position="static" variant="dense" color="default" className={classes.appBar}>
-            <Typography className={classes.text} variant="body1" align="center" gutterBottom>
+      <div>
+        <AppBar position="static" variant="elevation" color="default" className={classes.appBar}>
+            <Typography className={classes.text} variant="body2" align="center" >
             {tag}
             </Typography>
         </AppBar>
-      </>
+      </div>
     )
 }

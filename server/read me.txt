@@ -4,11 +4,14 @@ run =>   nodemon app.js in vscode, from server dir
 http://localhost:3000/categories
 http://localhost:3000/products?categoryId=1
 
-NODE
-=====
-mongo:
-mongo login via  google  : drormu2@gmail.com  + sararoni1
+Elstrtic search  7.5
+---------------------
+insert to elastic via coomand like:
 
-https://cloud.mongodb.com/v2/6056da8425cbce14dfca3746#metrics/replicaSet/606e9e589fb54051bc237ca8/explorer/shop/products/find
+http://localhost:3001/load?file=books
+
+json samples in :
+C:\GIT\Elasticsearch-React\server\Loaders
+
 
 

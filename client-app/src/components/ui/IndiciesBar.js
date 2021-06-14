@@ -1,143 +1,55 @@
-import React, {useContext, useReducer,useEffect} from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import React, {useContext, useReducer,useEffect,useState} from 'react';
 import SearchContext from '../../state/context';
-import {initCall} from '../../api/searchApi';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import TabContext from '@material-ui/lab/TabContext';
+import TabList from '@material-ui/lab/TabList';
+import TabPanel from '@material-ui/lab/TabPanel';
+
 
 
 export default function IndiciesBar() {
-
   const classes = useStyles();
   const {state, dispatch} = useContext(SearchContext);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log('in header is header useEffect '+state.configuration)   ;
-      if(state.configuration == null)
-      {              
-          return initCall().then(res => {
-            dispatch({type:'SET_INIT_CONFIGURATION', payload:res});    
-            console.log('in header '+state.configuration)   ;
-          }); 
-         
-      }
-    };
- 
-    fetchData();
-  }, []);
- 
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   
+  
+
+  const indicesInfo = state.configuration ?  state.configuration.indicesInfo.map(a=>a) : [];
+
 
   return (
-    <div className={classes.grow}>
-      <AppBar position="fixed">
-        <Toolbar>
-          
-          <Typography className={classes.title} variant="h6" noWrap>          
-             {state.appTitle}
-           </Typography>
-          
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder=""
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>           
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-             
-              aria-haspopup="true"             
-              color="inherit"
-            >
-              <AccountCircle />
-              <Typography variant="subtitle1" noWrap>          
-            {state.configuration ? state.configuration.user.displayName : null}
-           </Typography>
-                
-              </IconButton>
-          </div>
-          
-        </Toolbar>
-      </AppBar>  
-      <div className={classes.toolbar}></div>
-    </div>
-    
+    <Paper className={classes.root}  style={{
+      padding: '0px',     
+    }}>
+      <Tabs  position="fixed"        
+        value={value}
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        centered
+        
+      >
+        {indicesInfo.map((i)=><Tab   label={i.title}  key={i.name}/>)}
+        
+       
+      </Tabs>
+    </Paper>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
-  grow: {
-    flexGrow: 1,
+  root: {    
+    flexGrow: 1,  
+    backgroundColor:'rgba(0, 0, 0, 0.1)',
+    marginTop :'-25px',   
   },
-  toolbar: theme.mixins.toolbar,
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '80ch',
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  }
-})); 
+ 
+}));
