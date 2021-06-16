@@ -1,4 +1,5 @@
 import axios from "axios";
+import chalk  from "chalk";
 
 
 const serverUrl = 'http://localhost:3001/';
@@ -20,7 +21,7 @@ const initCall = () => {
     })
     .catch((err) => 
     {
-      console.log(err);
+      chalk.bgRed.red(err);
     });
 }
 
@@ -41,7 +42,49 @@ const autocomplete = (term,activeIndex) => {
   })
   .catch((err) => 
   {
-    console.log("*****************************" +err);
+    chalk.bgRed.red(err);
+    return [];
+  });
+}
+
+
+const search = (term,state) => {
+  //console.log('call init');
+  //var queryString = `term=${term}&activeIndex=${activeIndex}`;
+   
+  return client.post('/search', 
+    {
+      term,
+      activeIndex:state.activeIndex
+    }
+  )
+  .then((response) => {
+     console.log(response.data);
+    return response.data;
+  })
+  .catch((err) => 
+  {
+    chalk.bgRed.red(err);
+    return [];
+  });
+}
+
+const searchNonActives = (term) => {
+  //console.log('call init');
+  //var queryString = `term=${term}&activeIndex=${activeIndex}`;
+ 
+  return client.get('/searchNonActives', {
+    params: {
+      term
+    }
+  })
+  .then((response) => {
+     console.log(response.data);
+    return response.data;
+  })
+  .catch((err) => 
+  {
+    chalk.bgRed.red(err);
     return [];
   });
 }
@@ -60,5 +103,6 @@ export  {
   initCall,
   serverUrl,
   autocomplete,
-    //autocomplete,
+  search,
+  searchNonActives,
   };

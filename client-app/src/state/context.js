@@ -7,7 +7,8 @@ var initialState = {
     loading:false,   
     darkMode: localStorage.getItem('darkMode') && localStorage.getItem('darkMode') === 'true' ? true : false,
     term:null,
-    results: '123',
+    results: null,
+    nonActiveResults:null,
     autocompleteResults :[]
     //user:{username:'UUUU', displayname:'דרור מוסאי'}
 };

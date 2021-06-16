@@ -9,7 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchContext from '../../state/context';
-import {initCall,autocomplete} from '../../api/searchApi';
+import {initCall,autocomplete,searchNonActives,search} from '../../api/searchApi';
 
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -26,7 +26,6 @@ export default function SearchBox() {
 const fetchaAutocomplete = async (term) => {    
     return autocomplete(term, state.activeIndex);
 };
-
 const onTermsChange = (term) => {  
   
   console.log('term is ' + term );
@@ -39,25 +38,49 @@ const onTermsChange = (term) => {
   else
   {     
     fetchaAutocomplete(term).then(res=> { 
-    // res = res.map(a=>a.replace(new RegExp(term, 'gi'), '<b>'+term+'</b>'));
-     
-     
-     
+    // res = res.map(a=>a.replace(new RegExp(term, 'gi'), '<b>'+term+'</b>'));     
      dispatch({type:'SET_AUTOCOMPLETE_RESULTS', payload:res});
     } );
-    
-    
   }
 }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      //console.log('in header is header useEffect '+state.configuration)   ;   
-    };
- 
-    fetchData();
-  }, []);
+const fetchSearch = async (term) => {    
+  return search(term, state).then(res => {
+    dispatch({type:'SET_ACITVE_RESULTS', payload:res});        
+  });
+};
 
+const fetchSearchNonActives = async (term) => {     
+      return searchNonActives(term).then(res => {        
+        dispatch({type:'SET_NONACTIVE', payload:res});        
+      });
+    };  
+
+useEffect(() => {
+  const listener = event => {
+    if (event.code === "Enter" || event.code === "NumpadEnter") {
+      if(event.target.value && event.target.value.length < 2)
+      {                
+        return;
+      }
+      console.log("Enter key was pressed. Run your function.");
+      event.preventDefault();
+      fetchSearch(event.target.value).then(res=> { 
+          console.log('after search');
+          fetchSearchNonActives(event.target.value).then(res=> { 
+            console.log('after fetchSearchNonActives');
+          });
+        } );
+
+
+      // callMyFunction();
+    }
+  };
+  document.addEventListener("keydown", listener);
+  return () => {
+    document.removeEventListener("keydown", listener);
+  };
+}, []);
 
 
   return (
@@ -70,7 +93,8 @@ const onTermsChange = (term) => {
               renderInput={(params) => (
                 <TextField
                 className={classes.searchInput}    
-                onChange={({ target }) =>  onTermsChange(target.value)}                         
+                onChange={({ target }) =>  onTermsChange(target.value)}    
+                                     
                   {...params}
                   dir='rtl'                 
                   margin="dense"
@@ -104,8 +128,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   '@global': {
-    '.MuiAutocomplete-option[data-focus="true"]': {
-       
+    '.MuiAutocomplete-option[data-focus="true"]': {       
     },
     '.MuiInputBase-input': {
       color: 'white'

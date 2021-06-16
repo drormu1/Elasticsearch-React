@@ -31,7 +31,7 @@ export default function Layout() {
       <Grid item xs={12}>
         <Header />
       </Grid>
-      { state.configuration ?
+      { state.configuration?
        
        state.results   ?        
         <Grid item xs={12}>
@@ -47,12 +47,13 @@ export default function Layout() {
         :
         <Grid container spacing={2} style={{ 'minHeight': '800px' }}>
                 <div style={{
-                  color:'rgba(0, 0, 0, 0.54)',
-                  marginRight: '500px',
-                  width: '100%',            
+                  color:'rgba(0, 0, 0, 0.44)',
+                  marginRight: '30%',
+                  width: '100%',      
+                  fontSize: '0.75em'
                 }}>
                  {/* <CircularProgress />             */}
-                הקלד מילת חיפוש (לפחות 3 תווים)
+                {/* הקלד מילת חיפוש (לפחות 3 תווים) */}
                 </div>
         </Grid>
         : <div style={{minHeight : '800px'}}></div>
