@@ -52,11 +52,13 @@ class Helper {
 
 
       //{"range":{"purchased_at":{"lt":"now","gte": "2016-10-13T00:00:00"}}}
-        arr.push(JSON.parse(`{"range":{
-                    "purchased_at": {
-                      "gte": "2015-10-13T00:00:00",
-                      "lt": "now"
-          }}}`));
+
+
+        // arr.push(JSON.parse(`{"range":{
+        //             "purchased_at": {
+        //               "gte": "2015-10-13T00:00:00",
+        //               "lt": "now"
+        //   }}}`));
 
       return arr;
     }
@@ -89,12 +91,15 @@ class Helper {
     getAggsStr(filters)
     {
       let str='';
+      if(filters == null || filters.length==0)
+        return;
+        
       filters.forEach(f => {
         let isKeyword  = true;                             
          str += `"by_${f}":{"terms":{"field":"${f}${this.getAggType(f)}","size":${this.getAggSize(f)}}},`;
        })
        str += this.getTotalAmountRangeAggregation();
-       str += this.getPurchasedAtRangeAggregation();
+       //str += this.getPurchasedAtRangeAggregation();
 
        str = str.slice(0,-1);
        return JSON.parse(`{${str}}`);
@@ -186,7 +191,7 @@ logging(doc)
     //logger.info("*** querry ***");
     //logger.info( doc.meta.request.params.body)
 
-    console.log(chalk.white.bgRed.bold(doc.meta.request.params.body));
+    console.log(chalk.white.blue.bold(doc.meta.request.params.body));
     
     logger.info("*** results ***");
     logger.info(doc.body);

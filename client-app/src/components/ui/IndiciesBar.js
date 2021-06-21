@@ -24,23 +24,27 @@ export default function IndiciesBar() {
   useEffect(() => {
     console.log( state);
     
-   const fecthRequests = () => {
+   const fecthRequests = () => {    
     if(state.term && state.term.length > 2)
     {                           
     
     fetchSearch(state.term).then(res=> { 
-      console.log('after search');      
+    
+      console.log('IndiciesBar - after search result is =' +state.results?state.results.count : 0);       
       fetchSearchNonActives(state.term).then(res=> { 
-        console.log('after fetchSearchNonActives');
+        
       });
   } )
   }
   }
+
+
   fecthRequests();
   }, [state.activeIndex])
 
   const fetchSearch = async (term) => {    
     return search(term, state).then(res => {
+    
       dispatch({type:'SET_ACITVE_RESULTS', payload:res});        
     });
   };
@@ -54,13 +58,10 @@ export default function IndiciesBar() {
       
  const activeIndexChange =  (event) => 
  {
-
     const  index = event.target.parentElement.id;
     event.preventDefault();
     dispatch({type:'SET_ACTIVE_INDEX', payload:index});
   
-   
-        
  }
 
   const indicesInfo = state.configuration ?  state.configuration.indicesInfo.map(a=>a) : [];
@@ -96,7 +97,8 @@ const useStyles = makeStyles((theme) => ({
   root: {    
     
     backgroundColor:'rgba(0, 0, 0, 0.1)',
-    marginTop :'-25px',   
+    marginTop :'-32px',   
+    marginBottom:'10px'
   },
 
   

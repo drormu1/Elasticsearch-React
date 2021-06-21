@@ -11,9 +11,9 @@ module.exports = class Settings {
             [{ 
                     "name":"orders",
                     "title":"הזמנות",
-                    "aggregation":["sales_channel", "salesman.name"  ,"status","_id"],
+                    "aggregation":["sales_channel", "salesman.name"  ,"status","_id","total_amount"],
                     "searchFields": ["sales_channel^5", "salesman.name"  ,"status","_id"],
-                    "returnFields": ["sales_channel", "salesman.name"  ,"status","_id","amount","purchased_at"],
+                    "returnFields": ["sales_channel", "salesman.name"  ,"status","_id","amount","purchased_at","total_amount"],
                     "ui":[
                             
                             {
@@ -51,7 +51,16 @@ module.exports = class Settings {
                                 "cssClass":"bold",
                                 "isMultiline":false,
                                 "pipe":"number"
-                            }                             
+                            },
+                            {
+                                "key":"total_amount",
+                                "title" :"סכום",
+                                "linkByFiledValue":"_id",
+                                "linkUrl":"http:..google.com/?tv=",
+                                "cssClass":"bold",
+                                "isMultiline":false,
+                                "pipe":"number"
+                            }                            
                         ]
                     },
                     {
@@ -61,8 +70,9 @@ module.exports = class Settings {
                         "searchFields": ["permalink^5", "name"  ,"twitter_username","tag_list","email_address","overview","category_code"],
                         "returnFields": ["permalink", "name"  ,"twitter_username","tag_list","email_address","overview","category_code"],
                         "ui":[
+                                
                                 {
-                                "sales_channel":{
+                                    "key":"sales_channel",
                                     "title" : "ערוץ מכירה",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -70,7 +80,8 @@ module.exports = class Settings {
                                     "isMultiline":false,
                                     "pipe":""
                                 },
-                                "name":{
+                                {
+                                    "key":"salenames_channel",
                                     "title" : "שם",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -78,7 +89,8 @@ module.exports = class Settings {
                                     "isMultiline":false,
                                     "pipe":""
                                 },
-                                "permalink":{
+                                {
+                                    "key":"permalink",
                                     "title" :"קישור",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -86,7 +98,8 @@ module.exports = class Settings {
                                     "isMultiline":false,
                                     "pipe":"url"
                                 },
-                                "twitter_username":{
+                                {
+                                    "key" :"twitter_username",
                                     "title" : "טוויטר",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -94,7 +107,8 @@ module.exports = class Settings {
                                     "isMultiline":false,
                                     "pipe":""
                                 },
-                                "email_address":{
+                                {
+                                    "key":"email_address",
                                     "title" : "מייל",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -102,7 +116,8 @@ module.exports = class Settings {
                                     "isMultiline":true,
                                     "pipe":""
                                 },
-                                "category_code":{
+                                {
+                                    "key":"category_code",
                                     "title" : "מזהה",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -110,7 +125,7 @@ module.exports = class Settings {
                                     "isMultiline":false,
                                     "pipe":""
                                 }
-                                }
+                                
                             ]
                         },
                         {
@@ -120,8 +135,9 @@ module.exports = class Settings {
                             "searchFields": ["title^5", "isbn"  ,"pageCount","shortDescription","longDescription","status","authors"],
                             "returnFields": ["publishedDate", "thumbnailUrl"  ,"shortDescription","longDescription","status","authors","categories"],
                             "ui":[
+                                    
                                     {
-                                    "status":{
+                                        "key" : "tilte",
                                         "title" : "שם הספר",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -129,7 +145,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":""
                                     },
-                                    "authors":{
+                                    {
+                                        "key" : "authors",
                                         "title" : "מחבר",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -137,7 +154,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":""
                                     },
-                                    "categories":{
+                                    {
+                                        "key" : "categories",
                                         "title" :"קטגורייה",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -145,7 +163,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":"url"
                                     },
-                                    "title":{
+                                    {
+                                        "key" : "title",
                                         "title" : "תאור",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -153,15 +172,17 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":""
                                     },
-                                    "isbn":{
-                                        "title" : "ISBN",
+                                    {
+                                        "key" : "isbn",
+                                        "title" : "מק''ט",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
                                         "cssClass":"bold",
                                         "isMultiline":true,
                                         "pipe":""
                                     },
-                                    "pageCount":{
+                                    {
+                                        "key" : "pageCount",
                                         "title" : "כמות דפים",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -169,7 +190,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":""
                                     },
-                                    "shortDescription":{
+                                    {
+                                        "key" : "shortDescription",
                                         "title" : "תאור ארוך",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -177,15 +199,25 @@ module.exports = class Settings {
                                         "isMultiline":true,
                                         "pipe":""
                                     },
-                                    "longDescription":{
+                                    {
+                                        "key" : "longDescription",
                                         "title" : "תאור ארוך",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
                                         "cssClass":"bold",
                                         "isMultiline":true,
                                         "pipe":""
+                                    },
+                                    {
+                                        "key" : "status",
+                                        "title" : "מצב הוצאה",
+                                        "linkByFiledValue":"_id",
+                                        "linkUrl":"http:..google.com/?tv=",
+                                        "cssClass":"bold",
+                                        "isMultiline":true,
+                                        "pipe":""
                                     }
-                                    }
+                                    
                                 ]
                         },
                         {
@@ -196,8 +228,9 @@ module.exports = class Settings {
                             "searchFields": ["address","address line 2","name^5","outcode","postcode","rating", "type_of_food"],
                             "returnFields": ["address","address line 2","name","outcode","postcode","rating", "type_of_food"],
                             "ui":[
+                                    
                                     {
-                                    "status":{
+                                        "key" : "name",
                                         "title" : "שם מסעדה",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -205,7 +238,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":""
                                     },
-                                    "outcode":{
+                                    {
+                                        "key" : "outcode",
                                         "title" : "קוד עסקי",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -213,7 +247,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":""
                                     },
-                                    "postcode":{
+                                    {
+                                        "key" : "postcode",
                                         "title" :"מיקוד",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -221,7 +256,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":"url"
                                     },
-                                    "rating":{
+                                    {
+                                        "key" : "rating",
                                         "title" : "דירוג",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -229,7 +265,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":""
                                     },
-                                    "type_of_food":{
+                                    {
+                                        "key" : "type_of_food",
                                         "title" : "סוג מזון",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -237,7 +274,8 @@ module.exports = class Settings {
                                         "isMultiline":true,
                                         "pipe":""
                                     },
-                                    "address":{
+                                    {
+                                        "key" : "address",
                                         "title" : "כתובת",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -245,7 +283,8 @@ module.exports = class Settings {
                                         "isMultiline":false,
                                         "pipe":""
                                     },
-                                    "address line 2":{
+                                    {
+                                        "key" : "address line 2",
                                         "title" : "כתובת לדואר",
                                         "linkByFiledValue":"_id",
                                         "linkUrl":"http:..google.com/?tv=",
@@ -253,7 +292,7 @@ module.exports = class Settings {
                                         "isMultiline":true,
                                         "pipe":""
                                     }
-                                    }
+                                    
                                 ]
                         },
 
@@ -265,25 +304,27 @@ module.exports = class Settings {
                         "aggregation":["name", "tags"],
                     
                         "returnFields": ["name", "description"  ,"tags","_id",],
-                    "ui":[
+                    "ui":[                            
                             {
-                            "name":{
-                                "title" : "מוצר",
+                                "key" : "status",
+                                "title" : "מוצר",                                
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
                                 "isMultiline":false,
                                 
                             },
-                            "tags":{
+                            {
+                                "key" : "tags",
                                 "title" : "תגיות",
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
                                 "isMultiline":false,
                                 
-                            },
-                            "description":{
+                            },                            
+                            {
+                                "key" : "description",
                                 "title" : "תאור",
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
@@ -291,15 +332,15 @@ module.exports = class Settings {
                                 "isMultiline":true,
                                 
                             },
-                            "_id":{
-                                "title" :"מזהה",
+                            {
+                                "title" :"_id",
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
                                 "isMultiline":false,
                                 "pipe":"number"
                             }
-                            }
+                            
                         ]
                     },  
                     {
@@ -309,8 +350,9 @@ module.exports = class Settings {
                         "aggregation":["completed"],                    
                         "returnFields": ["title", "completed","_id"],
                     "ui":[
+                            
                             {
-                            "name":{
+                                "key" : "name",
                                 "title" : "תאור",
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
@@ -318,7 +360,8 @@ module.exports = class Settings {
                                 "isMultiline":false,
                                 
                             },
-                            "completed":{
+                            {
+                                "key" : "completed",
                                 "title" : "האם בוצע",
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
@@ -326,7 +369,8 @@ module.exports = class Settings {
                                 "isMultiline":false,
                                 
                             },
-                            "_id":{
+                            {
+                                "key" : "_id",
                                 "title" :"מזהה",
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
@@ -334,7 +378,7 @@ module.exports = class Settings {
                                 "isMultiline":false,
                                 "pipe":"number"
                             }
-                            }
+                            
                         ]
                     },
                     {
@@ -345,8 +389,9 @@ module.exports = class Settings {
                         "searchFields": ["title", "description"  ,"location","name","id","_id"],
                         "returnFields": ["title", "description"  ,"location","name","id","_id"],
                         "ui":[                                                        
+                            
                             {
-                            "name" : {
+                                    "key" : "name",
                                     "title" :"שם הכותר",
                                      "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -355,14 +400,16 @@ module.exports = class Settings {
                                     "pipe":"number"
                                 },
                                
-                                "title":{
+                                {
+                                    "key" : "title",
                                     "title" : "תאור קצר",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,                                  
                                 },
-                                "id":{
+                                {
+                                    "key":"id",
                                     "title" : "מזהה פנימי",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -370,7 +417,8 @@ module.exports = class Settings {
                                     "isMultiline":false,
                                     "pipe":"number"
                                 },                                
-                                "_id":{
+                                {
+                                    "key" : "_id",
                                     "title" :"מזהה",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -378,7 +426,8 @@ module.exports = class Settings {
                                     "isMultiline":false,
                                     "pipe":"number"
                                 },                                
-                                "location":{
+                                {
+                                    "key" : "location",
                                     "title" :"מיקום",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -386,7 +435,7 @@ module.exports = class Settings {
                                     "isMultiline":false,                                    
                                 }                                
                                
-                                }
+                            
                             
                             ]
                     },
@@ -396,9 +445,9 @@ module.exports = class Settings {
                         "aggregation":["eyeColor", "company"],
                         "searchFields": ["name^5", "eyeColor"  ,"age","tags","address","company","_id"],                       
                         "returnFields": ["name", "eyeColor"  ,"age","tags","address","company","_id"],
-                        "ui":[  
-                            {                                                      
-                                "name":{
+                        "ui":[                                                                                
+                                {
+                                    "key" : "name",
                                     "title" :"שם העובד",
                                      "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -407,14 +456,16 @@ module.exports = class Settings {
                                    
                                 },
                                 
-                                "eyeColor":{
+                                {
+                                    "key" : "eyeColor",
                                     "title" : "עיניים",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,                                  
                                 },                                                              
-                                "_id":{
+                                {
+                                    "key" : "_id",
                                     "title" :"מזהה",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
@@ -422,35 +473,75 @@ module.exports = class Settings {
                                     "isMultiline":false,
                                     "pipe":"number"
                                 },                                
-                                "age":{
+                                {
+                                    "key" : "age",
                                     "title" :"גיל",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,                                    
                                 },                                
-                                "address":{
+                                {
+                                    "key" : "address",
                                     "title" :"כתובת",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,                                    
                                 } ,                                
-                                "company":{
+                                {
+                                    "key" : "company",
                                     "title" :"חברה",
                                     "linkByFiledValue":"_id",
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,                                    
-                                }                                                                
-                                }
-                            
+                                }  ,
+                                {
+                                    "key" : "status",
+                                    "title" :"מצב",
+                                    "linkByFiledValue":"_id",
+                                    "linkUrl":"http:..google.com/?tv=",
+                                    "cssClass":"bold",
+                                    "isMultiline":false,                                    
+                                }                                                                                                                               
                             ]
                     },
                     {
                         "name":"comments",
                         "title":"תגובות",
                         "searchFields": ["name^5", "email"  ,"body","_id"],
+                        "returnFields": ["name^5", "email"  ,"body","_id"],
+                        "aggregation":["name", "email"],
+                        "ui":[                                                       
+                                {
+                                    "key" : "name",
+                                    "title" :"שם",
+                                     "linkByFiledValue":"_id",
+                                    "linkUrl":"http:..google.com/?tv=",
+                                    "cssClass":"bold",
+                                    "isMultiline":false,
+                                   
+                                },                                
+                                {
+                                    "key" : "email",
+                                    "title" : "דואר אלקטרוני",
+                                    "linkByFiledValue":"_id",
+                                    "linkUrl":"http:..google.com/?tv=",
+                                    "cssClass":"bold",
+                                    "isMultiline":false,                                  
+                                },                                                              
+                                {
+                                    "key" : "body",
+                                    "title" :"תוכן",
+                                    "linkByFiledValue":"_id",
+                                    "linkUrl":"http:..google.com/?tv=",
+                                    "cssClass":"bold",
+                                    "isMultiline":false,
+                                    "pipe":"number"
+                                },                                                              
+                            
+                            ]
                     }    
         ];
 

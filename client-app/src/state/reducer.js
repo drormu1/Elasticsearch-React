@@ -26,11 +26,12 @@ export default function reducer(state, action){
 
         case 'SET_ACTIVE_INDEX': 
         return {
-            ...state,                
+            ...state, 
+            autocompleteResults : [],               
             activeIndex: action.payload
         }
 
-        case 'SET_ACITVE_RESULTS':         
+        case 'SET_ACITVE_RESULTS':              
             return {
                 ...state,                
                 results: action.payload

@@ -43,7 +43,7 @@ class Controller {
           }
         });
          
-         console.log(JSON.stringify(data, null, 4));
+         //console.log(JSON.stringify(data, null, 4));
           // var aggregations = Settings.general.filter(x => x.name == index)[0].aggregation;
           let indexAggs = [];
           let aggsOfField = []
@@ -92,11 +92,12 @@ class Controller {
 
   async searchNonActives(req) {
 
-    const activeIndex = req.body.activeIndex || 'orders';
-    const nonActives = Settings.general.filter(x => x.name != activeIndex);
-    const term = req.body.term || 'Wine';
+    //const activeIndex = req.body.activeIndex || 'orders';
+    const nonActives = Settings.general;
+    const term = req.query.term; 
     let results = [];
 
+   
     const res = await this.client.msearch({
       body: this.helper.getMultiSearchQuery(nonActives, term)
     })
@@ -109,31 +110,31 @@ class Controller {
         logger.info(err);
       });
 
-    console.log(chalk.white.bgGreen.bold(res.meta.request.params.body));
+    //console.log(chalk.white.bgGreen.bold(res.meta.request.params.body));
+
     nonActives.forEach((element, index) => {
       results.push({ name: element.name, count: res.body.responses[index].hits.total.value | 0 });
-      console.log(results);
+     // console.log(results);
     });
     return results;
   }
 
   async searchAsync(req) {
     try {
-
-      const activeIndex = req.body.activeIndex || 'orders';
+      const activeIndex = req.body.activeIndex;
       const indexSettings = Settings.general.find(x => x.name === activeIndex);
 
       const searchRequest = new SearchRequest();
       searchRequest.activeIndex = activeIndex;
-      searchRequest.term = "gert Cla Gra ";
+      searchRequest.term = req.body.term;
       searchRequest.page = 0;
       searchRequest.size = 500;
       searchRequest.andCondition = 'or';
       searchRequest.sortDirection = 'desc';
       searchRequest.sort = '_id';
-
-      searchRequest.filters = [{ "key": "status", "values": ["processed", "completed", "cancelled"] },
-      { "key": "sales_channel", "values": ["store", "web", "phone"] }];
+      searchRequest.filters =[];
+      // searchRequest.filters = [{ "key": "status", "values": ["processed", "completed", "cancelled"] },
+      // { "key": "sales_channel", "values": ["store", "web", "phone"] }];
 
       searchRequest.filterSpecialAsStr = '';
 
@@ -163,12 +164,13 @@ class Controller {
 
         }
       });
-debugger;
+
       this.helper.logging(doc);
-      return doc.body.hits.hits;
+     debugger;
+      return doc.body.hits.hits.map(a=>a.fields);
     }
     catch (err) {
-      debugger;
+      
       logger.error(err.message);
       //console.log(err);
       return err;
@@ -205,7 +207,7 @@ debugger;
       });
 
       this.helper.logging(doc);
-      debugger;
+     
       return doc.body.hits.hits.map(h => h).map(m => m.fields).map(a => a.autocomplete[0].replace(/\[/g, '').replace(/\]/g, '')).sort();
     }
     catch (err) {

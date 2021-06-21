@@ -6,10 +6,12 @@ var initialState = {
     appTitle: process.env.REACT_APP_CLIENT_NAME + ' - ' + process.env.REACT_APP_DEPLOYMENT_NAME,
     loading:false,   
     darkMode: localStorage.getItem('darkMode') && localStorage.getItem('darkMode') === 'true' ? true : false,
-    term:null,
+    term:'wine',
     results: null,
     nonActiveResults:null,
-    autocompleteResults :[]
+    autocompleteResults :[],
+    pageSize:50,
+    pageNamber:0
     //user:{username:'UUUU', displayname:'דרור מוסאי'}
 };
 

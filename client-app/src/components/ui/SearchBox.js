@@ -26,8 +26,14 @@ export default function SearchBox() {
 const fetchaAutocomplete = async (term) => {    
     return autocomplete(term, state.activeIndex);
 };
-const onTermsChange = (term) => {  
+
+const onOptionChange = (option) =>
+{
   
+  console.log(option);
+}
+
+const onTermsChange = (term) => {   
   console.log('term is ' + term );
   dispatch({type:'SET_TERM', payload:term});
 
@@ -36,7 +42,7 @@ const onTermsChange = (term) => {
     dispatch({type:'SET_AUTOCOMPLETE_RESULTS', payload:[]});
   }
   else
-  {     
+  {       
     fetchaAutocomplete(term).then(res=> { 
     // res = res.map(a=>a.replace(new RegExp(term, 'gi'), '<b>'+term+'</b>'));     
      dispatch({type:'SET_AUTOCOMPLETE_RESULTS', payload:res});
@@ -44,43 +50,48 @@ const onTermsChange = (term) => {
   }
 }
 
-const fetchSearch = async (term) => {    
-  return search(term, state).then(res => {
+const fetchSearch = async () => {    
+  return search(state.term, state).then(res => {
     dispatch({type:'SET_ACITVE_RESULTS', payload:res});        
   });
 };
 
-const fetchSearchNonActives = async (term) => {     
-      return searchNonActives(term).then(res => {        
+const fetchSearchNonActives = async () => {     
+      return searchNonActives(state.term).then(res => {        
         dispatch({type:'SET_NONACTIVE', payload:res});        
       });
     };  
 
+
+    
 useEffect(() => {
   const listener = event => {
-    if (event.code === "Enter" || event.code === "NumpadEnter") {
-      if(event.target.value && event.target.value.length < 2)
+
+    if (event.code === "Enter" || event.code === "NumpadEnter" || event.button != null) {
+     
+      if(!state.term ||  state.term.length < 2)
       {                
         return;
       }
-      console.log("Enter key was pressed. Run your function.");
-      event.preventDefault();
-      fetchSearch(event.target.value).then(res=> { 
-          console.log('after search');
-          fetchSearchNonActives(event.target.value).then(res=> { 
-            console.log('after fetchSearchNonActives');
+      
+      fetchSearch().then(res=> {           
+          fetchSearchNonActives().then(res=> {             
           });
         } );
-
-
-      // callMyFunction();
     }
   };
-  document.addEventListener("keydown", listener);
-  return () => {
-    document.removeEventListener("keydown", listener);
-  };
-}, []);
+    document.addEventListener("keydown", listener);
+    // document.addEventListener("onclick", listener);
+    // document.addEventListener("ondbclick", listener);
+    // document.addEventListener("mousedown", listener);
+
+    return () => {
+      document.removeEventListener("keydown", listener);      
+      // document.removeEventListener("onclick", listener);
+      // document.removeEventListener("ondbclick", listener);
+      // document.removeEventListener("mousedown", listener);
+    };
+}, [state.term]);
 
 
   return (
@@ -89,8 +100,9 @@ useEffect(() => {
               freeSolo
               id="autocomlete"              
               options={state != null   ? state.autocompleteResults.map(a=>a): []}              
-             
+              onChange={(event, value) => onTermsChange(value)} 
               renderInput={(params) => (
+                
                 <TextField
                 className={classes.searchInput}    
                 onChange={({ target }) =>  onTermsChange(target.value)}    

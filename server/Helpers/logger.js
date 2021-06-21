@@ -4,7 +4,7 @@ const options = {
   file: {
       
     level: 'info',
-    filename: 'd:\\logs\\search\\app.log',
+    filename: 'c:\\logs\\search\\app.log',
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB

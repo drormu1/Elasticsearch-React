@@ -39,20 +39,6 @@ app.get("/load",function(req,res){
   res.status(200).send(result);   
 });  
 
-app.get('/search', (req, res, next) => {  
-
-    res.header('Content-Type', 'application/json');
-    controller.searchAsync(req)
-      .then((r)=>{
-       // console.log(r);
-        res.status(200).send(r);        
-      })
-      .catch((e)=>{ 
-        console.log(e); 
-       // console.error('search: ', e)
-        res.status(500).send(e.body)
-      })
-  });
 
   app.get('/init', (req, res, next) => {
       
@@ -72,6 +58,23 @@ app.get('/search', (req, res, next) => {
       });
       
   });
+
+  app.post('/search', (req, res, next) => {  
+   
+    res.header('Content-Type', 'application/json');
+    controller.searchAsync(req)
+      .then((r)=>{
+        debugger;
+       // console.log(r);
+        res.status(200).send(r);        
+      })
+      .catch((e)=>{ 
+        console.log(chalk.re.bgRed(e)); 
+       // console.error('search: ', e)
+        res.status(500).send(e.body)
+      })
+  });
+
  
   app.get('/searchNonActives', (req, res, next) => {  
 
@@ -82,14 +85,13 @@ app.get('/search', (req, res, next) => {
         res.status(200).send(r);        
       })
       .catch((e)=>{ 
-        console.log(e); 
+        console.log(chalk.re.bgRed(e)); 
        // console.error('search: ', e)
         res.status(500).send(e.body)
       })
   });
 
-  app.get('/autocomplete', (req, res, next) => {  
-    debugger;
+  app.get('/autocomplete', (req, res, next) => {     
     res.header('Content-Type', 'application/json');
     controller.autocompleteAsync(req)
       .then((r)=>{
@@ -99,7 +101,7 @@ app.get('/search', (req, res, next) => {
       .catch((e)=>{ 
         console.log(e); 
        // console.error('search: ', e)
-       debugger;
+      
         res.status(500).send(e.body)
       })
   });

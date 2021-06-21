@@ -11,14 +11,21 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchContext from '../../state/context';
 import {initCall} from '../../api/searchApi';
 import IndiciesBar from './IndiciesBar';
+import Pager from './Pager';
+import ResultsGrid from './ResultsGrid';
+import Paper from "@material-ui/core/Paper";
 
 export default function Content() {
     const classes = useStyles();
 
     return (
-        <div >
+        <div style={{textAlign:'center'}}>
             <IndiciesBar/>
-           Content
+            
+            <ResultsGrid/>
+            
+            <Pager/>
+          
         </div>
     )
 };  

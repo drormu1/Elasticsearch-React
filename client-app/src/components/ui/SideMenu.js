@@ -16,10 +16,13 @@ export default function SideMenu() {
     const {state, dispatch} = useContext(SearchContext);
 
     const currentIndexAggregations = state.configuration ?  state.configuration.allAggregations.find(a=>state.activeIndex === a.index) : null;    
-    const ui = state.configuration ?  state.configuration.indicesInfo.filter(i=>i.name === state.activeIndex)[0].ui : null;
-
+    const ui = state.configuration && state.configuration.indicesInfo.some(i=>i.name === state.activeIndex)
+     ?  state.configuration.indicesInfo.find(i=>i.name === state.activeIndex).ui 
+     : null;
+  
     function translateField(field)
     {
+        
         if(ui)
         {
            
