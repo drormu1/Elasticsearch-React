@@ -166,8 +166,8 @@ class Controller {
       });
 
       this.helper.logging(doc);
-     debugger;
-      return doc.body.hits.hits.map(a=>a.fields);
+    
+      return doc.body.hits.hits;
     }
     catch (err) {
       

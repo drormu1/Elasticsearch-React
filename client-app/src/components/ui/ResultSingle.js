@@ -1,4 +1,5 @@
 import React, {useContext, useReducer,useEffect} from 'react';
+import moment from "moment";
 import SearchContext from '../../state/context';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -9,7 +10,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { red } from '@material-ui/core/colors';
 import { FilterListRounded, Height } from '@material-ui/icons';
-import { Divider } from '@material-ui/core';
+import { Divider, getLuminance } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 export default function ResultSingle(props) {
@@ -30,7 +31,7 @@ export default function ResultSingle(props) {
         }
     }
 
-    function getSingleRow()
+    function getFieldOnSameRow()
     {    
       
          let html=[];
@@ -43,54 +44,107 @@ export default function ResultSingle(props) {
                 let value = props.result[currentUI.key][0] ;              
                 if(value && value !== '')
                 {                  
-                  html.push(getFieldHtml(i,value,currentUI));                                     
+                  html.push(getFieldHtml(i,value,currentUI,2));                                     
                 }
             }         
         }
 
-       //html.push(<Grid item xs={12}><br/></Grid>);       
-       //html.push(<Grid item xs={12}><hr className={classes.hr}/></Grid>);    
-     
        return html;
     }
+
+
+    function getMultiLineFields()
+    {
+        let html=[];
+        let counterColumnsPerRow = 0;
+      
+       for (var i=0;i<ui.length; i++)
+       {
+           const currentUI= ui[i];
+           if(props.result.hasOwnProperty(currentUI.key) && currentUI.isMultiline)
+           {
+               let value = props.result[currentUI.key][0] ;              
+               if(value && value !== '')
+               {              
+                     
+                 html.push(<Grid  key={`${currentUI.key}_${i}`} container>{getFieldHtml(i,value,currentUI,12)}</Grid>);                                     
+               }
+           }         
+       }
+      return html;
+    }
+
+   
+    
  
-    function getFieldHtml(i,value,currentUI)
+    function getFieldHtml(i,value,currentUI,width)
     {     
-        let key= props.ind +"_"+currentUI.key+"_"+i;        
-        var fieldHtml=[];
-        if(currentUI.isMultiline)
+        let key= `${props.ind}_${currentUI.key}_${i}_${Math.random(100000)}`;        
+        var fieldHtml=[]; 
+        if(currentUI.pipe)
         {
-            fieldHtml.push(<Grid container><Grid item xs={12}  className={classes.field} >{currentUI.title}: {value}</Grid></Grid>)
+            switch (currentUI.pipe) {
+                case 'int' :
+                    value =  value.toLocaleString(navigator.language, { minimumFractionDigits: 0 });
+                    break;
+                case 'decimal' :
+                    value =  value.toLocaleString(navigator.language, { minimumFractionDigits:3 });
+                    break;
+                case 'datetime' :
+                    value =  moment(value).format("HH:mm:ss DD-MM-YYYY");                     
+                        break;
+                case 'date' :
+                    value =  moment(value).format("DD-MM-YYYY");                     
+                        break;
+                default:
+                    break;
+
+            }
+
         }
-        fieldHtml.push(<Grid item xs={6}  className={classes.field} >{currentUI.title}: {value}</Grid>)
-        // fieldHtml.push(<div key={key} className={currentUI.isMultiline ?'col-md-12 ' : 'col-md-2 '}  style={{float:'right',display : currentUI.isMultiline ? 'block' : 'flex'}} >{currentUI.title} {value}</div>);
+       
+        fieldHtml.push(<Grid key={key} item xs={width} title={value}  className={classes.field} ><span xs={1} className={classes.label}> {currentUI.title}: </span>{value}</Grid>)
         return fieldHtml;
     }
 
+   
 
-
-    return (            
-            <div style={{display:'flex',width:'100%'}}>{getSingleRow()}</div>
+    return (
+            <div>
+                <Grid container   >
+                    {getFieldOnSameRow()}
+                </Grid>
+                {getMultiLineFields()}
+                <hr className={classes.hr}/>
+            </div>
     )
 };
 
 
 const useStyles = makeStyles((theme) => ({
-    aggsGroupBox: {
-      display: 'flex',      
-      color:'rgba(0, 0, 0, 0.54)',
-      marginBottom :'15px',
-  
-    
-    },
+ 
     hr:
     {
         borderColor:'rgba(0, 0, 0, 0.05)',
     },
     field:{
         overflowX: 'hidden',
-        textAlign: 'rigth',
+        textAlign: 'right',
+        fontSize:'0.9em',
+        marginBottom:'5px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'
        //// background:'red'
+    },
+    label:{
+      width: '120px',
+      overflow:'hidden',
+      display: 'flex',
+    //   background:  'rgba(0, 0, 0, 0.05)',
+    color :'#3f51b5',
+     // padding: '0px 5px',
+    //  margin:'2px',
+      borderRadius:'3px'
     }
    
   }));

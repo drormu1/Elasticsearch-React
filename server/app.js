@@ -63,8 +63,7 @@ app.get("/load",function(req,res){
    
     res.header('Content-Type', 'application/json');
     controller.searchAsync(req)
-      .then((r)=>{
-        debugger;
+      .then((r)=>{     
        // console.log(r);
         res.status(200).send(r);        
       })

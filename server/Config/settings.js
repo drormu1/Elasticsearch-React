@@ -23,7 +23,7 @@ module.exports = class Settings {
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
                                 "isMultiline":false,
-                                "pipe":"number"
+                                
                             },
                             {
                                 "key":"salesman.name",
@@ -32,16 +32,16 @@ module.exports = class Settings {
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
                                 "isMultiline":false,
-                                "pipe":"number"
+                                
                             },
                             {
-                                "key":"_id",
-                                "title" :"מזהה",
+                                "key":"purchased_at",
+                                "title" :"תאריך ההזמנה",
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
-                                "isMultiline":false,
-                                "pipe":"number"
+                                "isMultiline":true,
+                                "pipe":"datetime"
                             }  ,
                             {
                                 "key":"status",
@@ -50,7 +50,7 @@ module.exports = class Settings {
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
                                 "isMultiline":false,
-                                "pipe":"number"
+                                
                             },
                             {
                                 "key":"total_amount",
@@ -58,8 +58,8 @@ module.exports = class Settings {
                                 "linkByFiledValue":"_id",
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
-                                "isMultiline":false,
-                                "pipe":"number"
+                                "isMultiline":true,
+                                "pipe":"decimal"
                             }                            
                         ]
                     },
@@ -338,7 +338,7 @@ module.exports = class Settings {
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
                                 "isMultiline":false,
-                                "pipe":"number"
+                                
                             }
                             
                         ]
@@ -376,7 +376,7 @@ module.exports = class Settings {
                                 "linkUrl":"http:..google.com/?tv=",
                                 "cssClass":"bold",
                                 "isMultiline":false,
-                                "pipe":"number"
+                                
                             }
                             
                         ]
@@ -397,7 +397,7 @@ module.exports = class Settings {
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,
-                                    "pipe":"number"
+                                    
                                 },
                                
                                 {
@@ -415,7 +415,7 @@ module.exports = class Settings {
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,
-                                    "pipe":"number"
+                                    
                                 },                                
                                 {
                                     "key" : "_id",
@@ -424,7 +424,7 @@ module.exports = class Settings {
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,
-                                    "pipe":"number"
+                                    
                                 },                                
                                 {
                                     "key" : "location",
@@ -471,7 +471,7 @@ module.exports = class Settings {
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,
-                                    "pipe":"number"
+                                    
                                 },                                
                                 {
                                     "key" : "age",
@@ -538,7 +538,7 @@ module.exports = class Settings {
                                     "linkUrl":"http:..google.com/?tv=",
                                     "cssClass":"bold",
                                     "isMultiline":false,
-                                    "pipe":"number"
+                                    
                                 },                                                              
                             
                             ]

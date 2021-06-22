@@ -32,48 +32,18 @@ export default function ResultsGrid() {
     }
 
     
-    // function getFieldHtml(value,currentUI)
-    // {     
-    //     let styles =   'float: right';
-    //     let classes = 'col-xs-2'
-    //     return <div  className={classes} style={{float:'right'}} >{currentUI.title} {value}</div>;
-    // }
-    // function getHtmlForEachResult(res)
-    // {
-       
-    //     let html=[];
-
-    //     for (var i=0;i<ui.length; i++)
-    //     {
-    //         const currentUI= ui[i];
-    //         if(res.hasOwnProperty(currentUI.key))
-    //         {
-    //             let value = res[currentUI.key][0] ;              
-    //             if(value && value!= '')
-    //             {
-    //                 html.push(getFieldHtml(value,currentUI));
-    //             }
-    //         }         
-    //     }
-       
-     
-        
-      
-    //     return html;
-
-    // }
 
     return (
         <div id="all-results" className={classes.Root}>
-        <Grid container  justify="space-between"   alignItems="center"  >
-            {state.results ? 
-             
-                        state.results.map ((res,index) =>                    
-                        <ResultSingle   result={res} ind={index}/>)
+       
+            {state.results ?      
+                   
+                       state.results.state.results.map(r=>r.fields).map ((res,index) =>                    
+                        <ResultSingle key={index}   result={res} ind={index}/>)
              : null
             }
            
-           </Grid>
+         
            </div>
     )
 };
@@ -83,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
    
     Root:
     {    
+        marginTop:'20px',
         flexGrow: 1,    
         padding:theme.spacing(0),        
     }
